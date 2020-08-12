@@ -83,8 +83,8 @@ class Index(View):
             "size": 100,
         })
         nodechilds = [{
-            'title': item['_source']['title'],
-            'nodechild': item['_source']['childnode']
+            'title': item['_source']['node'],
+            'nodechild': item['_source']['nodechild']
         } for item in nodechiled_items['hits']['hits']]
         hot_nodes = []
         for nodechild in nodechilds:
@@ -99,7 +99,6 @@ class Index(View):
             'id': item['_source']['id'],
             'index': hot_communtiy_items['hits']['hits'].index(item) + 1,
         } for item in hot_communtiy_items['hits']['hits']]
-        print('hot_communtiy_result: ', hot_communtiy_result)
         new_bugs_body = {"query": {"match": {'flag': 'Bug 曝光台'}}, 'from': 0, 'size': 5, 'sort': {"release_time": {"order": "desc"}}}
         new_bugs_items = es.search(index='testerhome_community', doc_type='community', body=new_bugs_body)
         new_bugs_result = [{
@@ -130,7 +129,6 @@ class Search(View):
             'url': '/community/' + item['_source']['id'],
         } for item in items['hits']['hits']]
         result = json.dumps(result)
-        print('result: ', result)
         return HttpResponse(result)
 
     def post(self, request):
@@ -180,10 +178,8 @@ class GetArticle(View):
             content = re.sub('<.+?>', '', search['content'])
             content = content[start: end]
             keywords = re.findall(keyword, content, flags=re.IGNORECASE)
-            print('keywords: ', keywords)
             for keyword in keywords:
                 content = content.replace(keyword, '<em>' + keyword + '</em>')
-            print('content: ', content)
             search['content'] = content
             searchs.append(search)
         total = items['hits']['total']
@@ -234,12 +230,9 @@ class GetCommunity(View):
             'title': item['_source']['title'],
         } for item in college_items['hits']['hits']]
         uid = community['uid']
-        print('uid: ', uid)
         user_body = {"query": {"match": {"uid": uid}}}
-        print(user_body)
         user_items = es.search(index='testerhome_user', doc_type='user', body=user_body)
         user_result = user_items['hits']['hits'][0]['_source']
-        print('user_result: ', user_result)
         return render(request, 'community.html', {'community': community, 'college_items': college_result, 'user': user_result})
 
     def post(self, request):
@@ -513,8 +506,8 @@ class GetNode(View):
             "size": 100,
         })
         nodechild = [{
-            'title': item['_source']['title'],
-            'nodechild': item['_source']['childnode']
+            'title': item['_source']['node'],
+            'nodechild': item['_source']['nodechild']
         } for item in nodechiled_items['hits']['hits']]
         page = request.GET.get('page', '')
         sort = request.GET.get('sort', '')
@@ -567,7 +560,6 @@ class GetNode(View):
             'release_time': get_curr_time(item['_source']['release_time']),
             'recovery_time': get_curr_time(item['_source']['recovery_time']),
         } for item in items['hits']['hits']]
-        print('node_items: ', node_items)
         if total % 20:
             total_page = total // 20 + 1
         else:
