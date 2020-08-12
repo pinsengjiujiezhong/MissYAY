@@ -1,0 +1,61 @@
+{% extends 'nodebase.html' %}
+
+{% block title_block %}
+  <div class="sub-navbar node-header hide-ios">
+    <div class="container">
+        <div class="title">
+          Bug 曝光台
+          <span class="total">共有 868 个讨论主题</span>
+        </div>
+        <div class="summary" id="node-summary">
+          <p>Bug 曝光台以推动产品质量为己任。 我们的 bug 是来自大众，众测和各家厂商！</p>
+
+<p>版规如下：</p>
+
+<ol>
+<li>不作恶，不利用 bug 谋利</li>
+<li>请描述清楚重现步骤</li>
+</ol>
+        </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block list_block %}
+      <div class="panel-body item-list">
+        {% for bug in bugs %}
+            <div class="topic media topic-24751">
+              <div class="avatar media-left">
+                <a title="{{ bug.uid }} ({{ bug.uname }})" href="{% url 'userinfo' bug.uid %}"><img class="media-object avatar-48" src="{{ MEDIA_URL }}{{ bug.portrait }}"></a>
+              </div>
+              <div class="infos media-body">
+                <div class="title media-heading">
+                  <a title="{{ bug.title }}" href="{% url 'community' bug.id %}">
+                    <span class="node">{{ bug.flag }}</span>
+                    {{ bug.title }}{% if awesome %}<i class="iconfont icon-zuanshi" title="精华帖"></i>{% endif %}
+            </a>
+                </div>
+                <div class="info">
+                    <a class="user-name" data-name="{{ bug.uname }}" title="{{ bug.uname }}({{ bug.uid }})" href="{% url 'userinfo' bug.uid %}">{{ bug.uname }}</a>
+                    {% if bug.recovery_username %}
+                      <span class="hidden-mobile">
+                      •
+                        最后由 <a class="user-name" data-name="{{ bug.recovery_username }}" title="{{ bug.recovery_username }}({{ bug.recovery_uid }})" href="{% url 'userinfo' bug.recovery_uid %}">{{ bug.recovery_username }}</a> 回复于 <abbr class="timeago"  rel="twipsy">{{ bug.recovery_time }}</abbr>
+                      </span>
+                    {% else %}
+                      <span class="hidden-mobile">
+                      •
+                        发布于 <abbr class="timeago"  rel="twipsy">{{ bug.release_time }}</abbr>
+                      </span>
+                    {% endif %}
+                </div>
+              </div>
+                {% if bug.comments %}
+                  <div class="count media-right">
+                      <a class="state-false" href="{% url 'community' bug.id %}">{{ bug.comments|length }}</a>
+                  </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+      </div>
+{% endblock %}

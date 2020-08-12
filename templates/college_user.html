@@ -1,0 +1,34 @@
+{% extends %}
+
+{% block main %}
+<div id="main" class="main-container container">
+
+<ul class="nav nav-tabs team-menu"><li class=""><a href="{% url 'get_college_detail' college.id %}">成员的话题列表</a></li><li class="active"><a href="{% url 'get_college_user' college.id %}">成员列表</a></li></ul>
+
+
+<div class="panel team-users">
+  <div class="panel-body">
+      <table class="table table-striped">
+        <tbody>
+        {% for user in college.users %}
+            <tr class="team-user media clearfix" data-id="4577">
+              <td class="avatar"><img class="media-object avatar-32" src="{{ MEDIA_URL }}{{ user.img }}">
+              </td><td class="name">
+                <a class="user-name" data-name="{{ user.uname }}" title="{{ user.uname }}({{ user.uid }})" href="{% url 'userinfo' user.uid %}">{{ user.uname }}</a>
+                {{ user.uname }}
+              </td>
+              <td class="role">
+                {% if user.role == "Owner" %}组管理员{% else %}组员{% endif %}
+              </td><td class="buttons">
+              </td>
+            </tr>
+        {% endfor %}
+      </tbody></table>
+  </div>
+  <div class="panel-footer">
+    
+  </div>
+</div>
+
+</div>
+{% endblock %}

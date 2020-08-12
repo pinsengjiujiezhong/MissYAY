@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet"  href="{% static 'css/front.css' %}">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/iconfont.css' %}">
+    <script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+    <title>MissYAY</title>
+    <style type="text/css">
+        .header.form-search{
+            margin-top: 3px;
+            height: 100%;
+        }
+        .dataList{display:none;position:absolute;left:-1px;top:38px;*top:3px;width:436px;background:#fff;border:1px solid #bfbfbf;list-style:none;border-top:none;padding-left: 0px}
+        .dataList li{padding:5px;font-size:14px;}
+        .dataList li:hover{background:#f0f0f0;color:#0080cc;font-weight:bold;}
+        .dataList li a{text-decoration:none;color: #41D1B4;}
+        .dataList a.litext{text-decoration:none;color: #41D1B4;}
+        .dataList li:hover{color: #356DD0}
+    </style>
+    <body class="page-topics" data-controller-name="topics">
+        <div id="main-page">
+             <div class="header">
+              <nav class="navbar navbar-inverse navbar-fixed-top navbar-default">
+                <div class="container">
+                  <div class="navbar-header" id="navbar-header" data-turbolinks-permanent="">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-navbar-collapse">
+                      <span class="sr-only">Toggle</span>
+                      <i class="fa fa-reorder"></i>
+                    </button>
+                    <a href="{% url 'index' %}" class="navbar-brand"><b>MissYAY</b></a>
+
+                  </div>
+                    <div class="collapse navbar-collapse" id="main-navbar-collapse">
+                      <div class="navbar-nav">
+                        <div class="navbar-topic-title">
+                          <a href="https://testerhome.com/topics/23456#" class="topic-title pull-left" title="{{ community.title }}" data-type="top">
+                            <h1><span class="node">{{ community.flag }}</span> <span class="title">{{ community.title }}</span></h1>
+                          </a>
+                        </div>
+                      </div>
+                     <div id="main-nav-menu">
+                        <ul class="nav navbar-nav">
+                    <li class="{% if Nid == 'topics' %}active{% endif %}"><a href="{% url 'get_node' 'topics' %}">社区</a>
+                    </li><li class="{% if Nid == 'bugs' %}active{% endif %}"><a href="{% url 'get_node' 'bugs' %}">Bug 曝光台</a></li>
+                    <li class="{% if Nid == 'questions' %}active{% endif %}"><a href="{% url 'get_node' 'questions' %}">问答</a></li>
+                    <li class="{% if colleges %}active{% endif %}"><a href="{% url 'get_college' %}">社团</a></li>
+                    <li class="{% if Nid == 'applications' %}active{% endif %}"><a href="{% url 'get_node' 'applications' %}">招聘</a></li><li class="">
+                    </ul>
+                    </div>
+                    </div>
+                    <ul class="nav navbar-nav user-bar navbar-right" style="margin-left: 50px">
+                          <li class="nav-search hidden-xs hidden-sm hidden-md">
+                            <div class="navbar-form form-search active" >
+                                <input class="form-control" id="search" type="text" value="" placeholder="搜索本站内容"><i class="iconfont searchbtn icon-sousuo"></i>
+                                <ul class="dataList">
+                                    <li></li>
+                                    <li></li>
+                                </ul>
+                            </div>
+                          </li>
+                    </ul>
+                </div>
+              </nav>
+             </div>
+            {% block title_block %}
+            {% endblock %}
+            {% block main %}
+        <div id="main" class="main-container container">
+
+        <div class="row">
+          <div class="col-md-9 home-main">
+
+        <div class="home_suggest_topics panel panel-default">
+          <div class="panel-heading">社区置顶</div>
+          <div class="panel-body topics row">
+              {% for stick_result in stick_results %}
+                <div class="col-md-6">
+                    {% for stick in stick_result %}
+                      <div class="topic media topic-24863">
+                          <div class="avatar media-left">
+                            <a title="{{ stick.uname }} ({{ stick.uid }})" href="{% url 'userinfo' stick.uid %}"><img class="media-object avatar-48" src="{{ MEDIA_URL }}{{ stick.portrait }}"></a>
+                          </div>
+                          <div class="infos media-body">
+                            <div class="title media-heading">
+                              <a title="{{ stick.title }}" href="{% url 'community' stick.id %}">{{ stick.title }}</a>
+                            </div>
+                            <div class="info">
+                              <a class="user-name" data-name="{{ stick.uname }}" title="{{ stick.uname }}({{ stick.uid }})" href="{% url 'userinfo' stick.uid %}">{{ stick.uname }}</a>
+                                {% if stick.teamuid %}
+                                    for <a class="team-name" data-name="{{ stick.teamname }}" title="{{ stick.teamname }}{{ stick.teamuid }})" href="{% url 'get_college_detail' stick.teamuid %}">{{ stick.teamname }}</a>
+                                {% endif %}
+                            </div>
+
+                          </div>
+                          {% if stick.comments %}
+                              <div class="count media-right">
+                                  <a class="state-false" href="{% url 'community' stick.id %}">{{ stick.comments|length }}</a>
+                              </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+              {% endfor %}
+          </div>
+        </div>
+
+
+        <div class="home_suggest_topics panel panel-default">
+          <div class="panel-heading">
+            最新帖子
+            <div class="pull-right">
+              <a href="{% url 'get_node' 'topics' %}?sort=release">查看更多...</a>
+            </div>
+          </div>
+          <div class="panel-body topics row">
+              {% for new_result in new_results %}
+                <div class="col-md-6">
+                    {% for new in new_result %}
+                      <div class="topic media topic-24863">
+                          <div class="avatar media-left">
+                            <a title="{{ new.uname }} ({{ new.uid }})" href="{% url 'userinfo' new.uid %}"><img class="media-object avatar-48" src="{{ MEDIA_URL }}{{ new.portrait }}"></a>
+                          </div>
+                          <div class="infos media-body">
+                            <div class="title media-heading">
+                              <a title="{{ new.title }}" href="{% url 'community' new.id %}">{{ new.title }}</a>
+                            </div>
+                            <div class="info">
+                              <a class="user-name" data-name="{{ new.uname }}" title="{{ new.uname }}({{ new.uid }})" href="{% url 'userinfo' new.uid %}">{{ new.uname }}</a>
+                                {% if new.teamuid %}
+                                    for <a class="team-name" data-name="{{ new.teamname }}" title="{{ new.teamname }}{{ new.teamuid }})" href="{% url 'get_college' new.teamuid %}">{{ new.teamname }}</a>
+                                {% endif %}
+                            </div>
+
+                          </div>
+                          {% if new.comments %}
+                              <div class="count media-right">
+                                  <a class="state-false" href="{% url 'community' new.id %}">{{ new.comments|length }}</a>
+                              </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+              {% endfor %}
+          </div>
+        </div>
+
+        <div class="home_suggest_topics panel panel-default">
+          <div class="panel-heading">
+            社区精华帖
+            <div class="pull-right">
+              <a href="{% url 'get_node' 'topics' %}?sort=awesome">查看更多精华帖...</a>
+            </div>
+          </div>
+          <div class="panel-body topics row">
+              {% for awesome_result in awesome_results %}
+                <div class="col-md-6  topics-group">
+                    {% for awesome in awesome_result %}
+                      <div class="topic media topic-24863">
+                          <div class="avatar media-left">
+                            <a title="{{ awesome.uname }} ({{ awesome.uid }})" href="{% url 'userinfo' awesome.uid %}"><img class="media-object avatar-48" src="{{ MEDIA_URL }}{{ awesome.portrait }}"></a>
+                          </div>
+                          <div class="infos media-body">
+                            <div class="title media-heading">
+                                <a title="{{ awesome.title }}" href="{% url 'community' awesome.id %}">
+                                    <span>{{ awesome.title }}</span>
+                                    <i title="精华帖" class="iconfont icon-zuanshi" data-toggle="tooltip"></i>
+                                </a>
+                            </div>
+                            <div class="info">
+                              <a class="user-name" data-name="{{ awesome.uname }}" title="{{ awesome.uname }}({{ awesome.uid }})" href="{% url 'userinfo' awesome.uid %}">{{ awesome.uname }}</a>
+                                {% if new.teamuid %}
+                                    for <a class="team-name" data-name="{{ awesome.teamname }}" title="{{ awesome.teamname }}{{ awesome.teamuid }})" href="{% url 'get_college_detail' awesome.teamuid %}">{{ awesome.teamname }}</a>
+                                {% endif %}
+                            </div>
+
+                          </div>
+                          {% if awesome.comments %}
+                              <div class="count media-right">
+                                  <a class="state-false" href="{% url 'community' awesome.id %}">{{ awesome.comments|length }}</a>
+                              </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+              {% endfor %}
+          </div>
+        </div>
+
+
+                <div class="index-locations panel panel-default">
+              <div class="panel-heading">热门节点 <i class="iconfont icon-jiedian" aria-hidden="true"></i></div>
+              <div class="panel-body location-list" style="text-align:center;">
+                  {% for hot_node in hot_nodes %}
+                    <span class="name"><a title="{{ hot_node.title }}" data-id="{{ hot_node.id }}" href="{% url 'get_node' hot_node.id %}">{{ hot_node.title }}</a></span>
+                  {% endfor %}
+              </div>
+            </div>
+
+
+              <div class="index-locations panel panel-default">
+            <div class="panel-heading">热门城市 <i class="iconfont icon-didian"></i> </div>
+            <div class="panel-body location-list" style="text-align:center;">
+                <span class="name"><a href="https://testerhome.com/users/city/%E5%8C%97%E4%BA%AC">北京</a></span>
+                <span class="name"><a href="https://testerhome.com/users/city/%E4%B8%8A%E6%B5%B7">上海</a></span>
+                <span class="name"><a href="https://testerhome.com/users/city/%E6%B7%B1%E5%9C%B3">深圳</a></span>
+                <span class="name"><a href="https://testerhome.com/users/city/%E6%9D%AD%E5%B7%9E">杭州</a></span>
+                <span class="name"><a href="https://testerhome.com/users/city/%E5%B9%BF%E5%B7%9E">广州</a></span>
+                <span class="name"><a href="https://testerhome.com/users/city/%E6%88%90%E9%83%BD">成都</a></span>
+                <span class="name"><a href="https://testerhome.com/users/city/%E5%8D%97%E4%BA%AC">南京</a></span>
+                <span class="name"><a href="https://testerhome.com/users/city/%E6%AD%A6%E6%B1%89">武汉</a></span>
+                <span class="name"><a href="https://testerhome.com/users/city/%E8%A5%BF%E5%AE%89">西安</a></span>
+                <span class="name"><a href="https://testerhome.com/users/city/%E8%8B%8F%E5%B7%9E">苏州</a></span>
+                <span class="name"><a href="https://testerhome.com/users/city/%E5%8E%A6%E9%97%A8">厦门</a></span>
+                <span class="name"><a href="https://testerhome.com/users/city/%E9%87%8D%E5%BA%86">重庆</a></span>
+            </div>
+          </div>
+
+
+
+          </div>
+          <div class="col-md-3 home-side-bar">
+
+
+            <div class="home_suggest_topics panel panel-default">
+              <div class="panel-heading">七日最热 Top10</div>
+              <div class="panel-body">
+                  {% for hot_communtiy in hot_communtiy_results %}
+                    <div class="sidebar_topic topic-{{ hot_communtiy.id }}">
+                      <div class="title">
+                                <span class="label label-default {% if hot_communtiy.index < 4%}top3{% endif %}">{{ hot_communtiy.index }}</span>
+                        <a title="{{ hot_communtiy.title }}" href="{% url 'community' hot_communtiy.id %}">
+                            {{ hot_communtiy.title }}
+                    </a>  </div>
+                    </div>
+                  {% endfor %}
+
+
+              </div>
+            </div>
+
+            <div class="home_suggest_topics panel panel-default">
+              <div class="panel-heading">最新 bug <i class="iconfont icon-bug-hong" aria-hidden="true"></i></div>
+              <div class="panel-body">
+                  {% for new_bugs in new_bugs_results %}
+                    <div class="sidebar_topic topic-{{ new_bugs.id }}">
+                      <div class="title">
+                                <span class="label label-default {% if new_bugs.index < 4%}top3{% endif %}">{{ new_bugs.index }}</span>
+                        <a title="{{ new_bugs.title }}" href="{% url 'community' new_bugs.id %}">
+                            {{ new_bugs.title }}
+                    </a>  </div>
+                    </div>
+                  {% endfor %}
+
+              </div>
+            </div>
+        <div id="hall-of-fames" class="panel panel-default">
+          <div class="panel-heading">最新加入 <i class="iconfont icon-hongqi-svg"></i>（新同学）</div>
+          <div class="panel-body">
+                <div class="users-label">
+                    {% for user in new_user_results %}
+                      <a class="users-label-item" href="{% url 'userinfo' user.uid %}" title="{{ user.uname }}">
+                        <img class="avatar-small inline-block" src="{{ MEDIA_URL }}{{ user.img }}">
+                        {{ user.uid }}
+                      </a>
+                    {% endfor %}
+            </div>
+
+          </div>
+        </div>
+
+
+
+            <div class="panel panel-default">
+              <div class="panel-heading">统计信息</div>
+              <ul class="list-group">
+                <li class="list-group-item">社区会员: 49473 人</li>
+                <li class="list-group-item">帖子数: 24176 个</li>
+                <li class="list-group-item">回帖数: 172029 条</li>
+              </ul>
+            </div>
+
+          </div>
+        </div>
+        </div>
+        {% endblock %}
+            <footer class="footer" id="footer" data-turbolinks-permanent="">
+            <div class="container">
+              <div class="row">
+          <div class="col-sm-9">
+            <div class="media">
+              <div class="media-left">
+                <img src="" style="width:48px;">
+              </div>
+              <div class="media-body">
+
+                <div class="links">
+                  <a href="https://testerhome.com/wiki/about">关于</a> /
+                  <a href="https://testerhome.com/users">活跃用户</a> /
+                  <a href="http://test-china.org/" target="_blank">中国移动互联网测试技术大会</a> /
+                  <a href="https://testerhome.com/topics/node13">反馈</a> /
+                  <a href="https://github.com/testerhome">Github</a> /
+                  <a href="https://testerhome.com//api-doc/">API</a> /
+                  <a href="https://testerhome.com/wiki/spreadtesterhome">帮助推广</a>
+
+                </div>
+                <div class="copyright" style="font-size:14px; color:#9CA4A9;margin-top:0px;margin-bottom:5px">
+                  TesterHome 移动测试社区，由众多移动测试工作者维护，致力于推进国内测试技术。Inspired by RubyChina
+                </div>
+        <div class="links" data-no-turbolink="">
+        <span style="font-size:14px; color:#666;">友情链接</span><span style="margin-left:5px">
+                  <a style="color:#317DDA;" href="http://wetest.qq.com/?from=links_testerhome" target="_blank">WeTest腾讯质量开放平台</a> /
+                  <a style="color:#317DDA;" href="http://www.infoq.com/cn" target="_blank">InfoQ</a> /
+                  <a style="color:#317DDA;" href="https://segmentfault.com/" target="_blank">SegmentFault</a> /
+                  <a style="color:#317DDA;" href="https://www.testwo.com/" target="_blank">测试窝</a> /
+                  <a style="color:#317DDA;" href="http://tieba.baidu.com/f?ie=utf-8&amp;kw=%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95&amp;fr=search" target="_blank">百度测试吧</a> /
+                  <a style="color:#317DDA;" href="http://www.itdks.com/" target="_blank">IT大咖说</a>
+        </span>
+            </div>
+                <div class="links" style="margin-top:0px" data-no-turbolink="">
+                  <a href="https://testerhome.com/?locale=zh-CN" rel="nofollow">简体中文</a> / <a href="https://testerhome.com/?locale=zh-TW" rel="nofollow">正體中文</a> / <a href="https://testerhome.com/?locale=en" rel="nofollow">English</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+            </div>
+          </footer>
+            <script type="text/javascript">
+                $search = $('#search')
+                $dataList = $('.dataList')
+                function suggest() {
+                    var searchText = $search.val();
+                    var tmpHtml = "";
+                    $.ajax({
+                        type: 'get',
+                        dataType: 'json',
+                        url: '/search/',
+                        data: {
+                            'keyword': searchText,
+                        },
+                        async: true,
+                        success: function (data) {
+                            $.each(data, function (index, result) {
+                                tmpHtml += '<li><a href="' + result.url + '" ' + 'style="text-decoration:none;color: #222;"'  + '>' + result.title + '</a></li>'
+                            });
+                            $(".dataList").html("");
+                            $(".dataList").append(tmpHtml);
+                            if (data.length == 0) {
+                                $('.dataList').hide()
+                            } else {
+                                $('.dataList').css('padding-left', '0px')
+                                $('.dataList').show()
+                            }
+                        }
+                    });
+                }
+                $search.click(function () {
+                    var keyword = $search.val()
+                    if (keyword){
+                        suggest()
+                    }
+                })
+                $search.keyup(function (event) {
+                    console.log('keyup')
+                    var keyword = $search.val()
+                    if (keyword && event.keyCode !== 13){
+                        suggest()
+                    } else if (keyword && event.keyCode === 13) {
+                        var href = '/searcharticle?keyword=' +  keyword
+                        $(window).attr('location', href);
+                    }
+                }).blur(function () {
+                    $dataList.hide()
+                })
+                $('.searchbtn').click(function () {
+                    var keyword = $search.val()
+                    if (keyword) {
+                        var href = '/searcharticle?keyword=' +  keyword
+                        $(window).attr('location', href);
+                    }
+                })
+            </script>
+            {% block custom_js %}
+            {% endblock %}
+            {% block custom_js_two %}
+            {% endblock %}
+        </div>
+    </body>
+</html>

@@ -1,0 +1,40 @@
+{% extends 'userbase.html' %}
+{% block right_block %}
+  <div class="panel panel-default">
+      <div class="panel-body">
+        <table class="node-topics table">
+  <tbody><tr class="head">
+    <td class="node hide-ios">节点</td>
+    <td class="title">标题</td>
+    <td class="replies">回复/赞</td>
+  </tr>
+  {% for community in communitys %}
+    <tr class="topic  ">
+      <td class="node hide-ios"><a class="node" href="/topics/node23">{{ community.flag }}</a></td>
+      <td class="title"><a href="{% url 'community'  community.id %}">{{ community.title }}</a>  <em><abbr class="timeago" rel="twipsy">{{ community.date }}</abbr></em></td>
+      <td class="replies">{{ community.comments|length }}/{{ community.zan }} </td>
+    </tr>
+  {% endfor %}
+
+</tbody></table>
+
+      </div>
+    {% if total_page != 1 %}
+      <div class="panel-footer clearfix">
+          <ul class="pagination">
+            {% if curr_page != 1 %}
+                <li><a rel="next" href="{% url 'gettopics' user.uid %}">首页</a></li>
+                <li><a rel="next" href="{% url 'gettopics' user.uid %}?page={{ up_page }}">上一页</a></li>
+            {% endif %}
+            {% for page in page_list %}
+                <li {% if curr_page == page %}class="active"{% endif %}><a rel="next" href="{% url 'gettopics' user.uid %}?page={{ page }}">{{ page }}</a></li>
+            {% endfor %}
+            {% if total_page != curr_page %}
+                <li><a rel="next" href="{% url 'gettopics' user.uid %}?page={{ next_page }}">下一页</a></li>
+                <li><a rel="next" href="{% url 'gettopics' user.uid %}?page={{ total_page }}">末页</a></li>
+            {% endif %}
+          </ul>
+      </div>
+    {% endif %}
+    </div>
+{% endblock %}

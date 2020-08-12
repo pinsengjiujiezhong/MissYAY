@@ -1,0 +1,49 @@
+{% extends 'userbase.html' %}
+
+{% block right_block %}
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <table class="node-topics table">
+          <tbody><tr class="head">
+            <td class="opts">节点</td>
+            <td class="title">标题</td>
+          </tr>
+          {% for fav in favs %}
+              <tr class="topic">
+                <td><a class="node" href="https://testerhome.com/topics/node{{ fav.nId }}">{{ fav.node }}</a></td>
+                <td class="title"><a title="{{ fav.title }}" href="{% url 'community' fav.topicsId %}">{{ fav.title }}</a></td>
+              </tr>
+          {% endfor %}
+        </tbody></table>
+      </div>
+        {% if page_num > 2 %}
+            <div class="panel-footer clearfix">
+              <ul class="pagination">
+                {% if curr_page != 1 %}
+                    <li><a rel="next" href="{% url 'get_favs' uid %}?page=1&type={{ type }}">首页</a></li>
+                    <li><a rel="next" href="{% url 'get_favs' uid %}?page={{ up_page }}">上一页</a></li>
+                {% endif %}
+                {% for page in pageList %}
+                    <li {% if curr_page == page %}class="active"{% endif %}><a rel="next" href="{% url 'get_favs' uid %}?page={{ page }}">{{ page }}</a></li>
+                {% endfor %}
+                {% if total_page != curr_page %}
+                    <li><a rel="next" href="{% url 'get_favs' uid %}?page={{ next_page }}">下一页</a></li>
+                    <li><a rel="next" href="{% url 'get_favs' uid %}?page={{ total_page }}">末页</a></li>
+                {% endif %}
+
+              </ul>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block custom_js %}
+<script type="text/javascript" data-turbolinks-eval="false">
+    $topics = $('.panel-body tr.topic')
+    $.each($topics, (index, topics ) => {
+        if (index % 2 === 0) {
+            $(topics).addClass('odd')
+        }
+    })
+</script>
+{% endblock %}

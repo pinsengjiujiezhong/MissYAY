@@ -1,0 +1,59 @@
+{% extends 'index.html' %}
+
+{% block main %}
+<div id="main" class="main-container container">
+  
+  
+  
+<div class="search-results panel panel-default">
+  <div class="panel-heading clearfix">
+    <div class="media">
+      <div class="media-body">
+        <div class="media-heading">
+        </div>
+        关于 “{{ keyword }}” 的搜索结果, 共 {{ total }} 条
+      </div>
+      <div class="media-right">
+          <a title="" data-id="appium" class="btn btn-default btn-sm button-filter-excellent-topic" href="https://testerhome.com/search?page=177&amp;q=appium#"><i class="fa fa-eye-slash"></i> <span>只看精华</span></a>
+      </div>
+    </div>
+  </div>
+
+    <div class="panel-body">
+        {% for search in searchs %}
+          <div class="result">
+              <div class="topic title">
+                <a href="{% url 'community' search.id %}">{{ search.title }}</a>
+
+              </div>
+              <div class="info">
+                <span class="url"><a href="{% url 'community' search.id %}">{{ search.url }}</a></span>
+                <span class="date" title="Last Updated At">{{ search.date }}</span>
+              </div>
+              <div class="desc">{{ search.content|safe }}</div>
+            </div>
+        {% endfor %}
+    </div>
+
+    {% if page_num > 2 %}
+            <div class="panel-footer clearfix">
+              <ul class="pagination">
+                {% if curr_page != 1 %}
+                    <li><a rel="next" href="{% url 'get_article' %}?keyword={{ keyword }}">首页</a></li>
+                    <li><a rel="next" href="{% url 'get_article' %}?page={{ up_page }}&keyword={{ keyword }}">上一页</a></li>
+                {% endif %}
+                {% for page in pageList %}
+                    <li {% if curr_page == page %}class="active"{% endif %}><a rel="next" href="{% url 'get_article' %}?page={{ page }}&keyword={{ keyword }}">{{ page }}</a></li>
+                {% endfor %}
+                {% if total_page != curr_page %}
+                    <li><a rel="next" href="{% url 'get_article' %}?page={{ next_page }}&keyword={{ keyword }}">下一页</a></li>
+                    <li><a rel="next" href="{% url 'get_article' %}?page={{ total_page }}&keyword={{ keyword }}">末页</a></li>
+                {% endif %}
+
+              </ul>
+            </div>
+        {% endif %}
+
+  </div>
+</div>
+{% endblock %}

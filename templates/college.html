@@ -1,0 +1,34 @@
+{% extends 'index.html' %}
+
+
+{% block main %}
+<div id="main" class="main-container container">
+<div id="teams">
+  <div id="hot_teams" class="team-list panel panel-default">
+    <div class="panel-heading">
+      <strong>TOP 活跃团队</strong>
+      <div class="pull-right hidden-xs">目前已经有 {{ total }} 个团队加入了 TesterHome</div>
+    </div>
+    <div class="panel-body">
+      <div class="row">
+          {% for college in colleges %}
+            <div class="col-xs-12 col-sm-6 col-md-4">
+            <div class="media user-card">
+              <div class="media-left"><a title="{{ college.id }} ({{ college.title }})" href="{% url 'get_college_detail' college.id %}"><img class="media-object avatar-48" src="{{ MEDIA_URL }}{{ college.img }}"></a></div>
+              <div class="media-body">
+                <div class="media-heading"><a class="team-name" data-name="{{ college.title }}" title="{{ college.title }}({{ college.id }})" href="{% url 'get_college_detail' college.id %}">{{ college.title }}</a></div>
+                <div class="infos">
+                  <div class="item opts"></i><span class="team-users-count">{{ college.users|length }} 个团队成员</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+</div>
+
+    </div>
+  </div>
+</div>
+
+</div>
+{% endblock %}

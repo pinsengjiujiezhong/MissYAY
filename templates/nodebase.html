@@ -1,0 +1,127 @@
+{% extends 'index.html' %}
+{% block title_block %}
+  <div class="sub-navbar node-header hide-ios">
+    <div class="container">
+        <div class="title">
+          {{ keyword }}
+          <span class="total">共有 {{ total }} 个讨论主题</span>
+        </div>
+    </div>
+  </div>
+{% endblock %}
+{% block main %}
+    <div id="main" class="main-container container">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="topics panel panel-default">
+                <div class="panel-heading node-header">
+                <ul class="filter nav nav-pills">
+                  <li class="">
+                    <a href="{% url 'get_node' Nid %}" data-turbolinks-action="replace">默认</a>
+                  </li>
+                  <li class="">
+                    <a href="{% url 'get_node' Nid %}?sort=awesome" data-turbolinks-action="replace"><i class="iconfont icon-zuanshi"></i> 精华帖</a>
+                  </li>
+                  <li class="">
+                    <a data-turbolinks-action="replace" href="{% url 'get_node' Nid %}?sort=noreply">零回复</a>
+                  </li>
+                  <li class="">
+                    <a data-turbolinks-action="replace" href="{% url 'get_node' Nid %}?sort=recovery">最新回复</a>
+                  </li>
+                  <li class="">
+                    <a data-turbolinks-action="replace" href="{% url 'get_node' Nid %}?sort=release">最近发布</a>
+                  </li>
+                </ul>
+                </div>
+                {% block list_block %}
+                      <div class="panel-body item-list">
+                        {% for node in nodes %}
+                            <div class="topic media topic-24751">
+                              <div class="avatar media-left">
+                                <a title="{{ node.uid }} ({{ node.uname }})" href="{% url 'userinfo' node.uid %}"><img class="media-object avatar-48" src="{{ MEDIA_URL }}{{ node.portrait }}"></a>
+                              </div>
+                              <div class="infos media-body">
+                                <div class="title media-heading">
+                                  <a title="{{ node.title }}" href="{% url 'community' node.id %}">
+                                    <span class="node">{{ node.flag }}</span>
+                                    {{ node.title }}
+                                    </a>
+                                </div>
+                                <div class="info">
+                                    <a class="user-name" data-name="{{ node.uname }}" title="{{ node.uname }}({{ node.uid }})" href="{% url 'userinfo' node.uid %}">{{ node.uname }}</a>
+                                    {% if questions.recovery_username %}
+                                      <span class="hidden-mobile">
+                                      •
+                                        最后由 <a class="user-name" data-name="{{ node.recovery_username }}" title="{{ node.recovery_username }}({{ node.recovery_uid }})" href="{% url 'userinfo' node.recovery_uid %}">{{ node.recovery_username }}</a> 回复于 <abbr class="timeago"  rel="twipsy">{{ node.recovery_time }}</abbr>
+                                      </span>
+                                    {% else %}
+                                      <span class="hidden-mobile">
+                                      •
+                                        发布于 <abbr class="timeago"  rel="twipsy">{{ node.release_time }}</abbr>
+                                      </span>
+                                    {% endif %}
+                                </div>
+                              </div>
+                                {% if questions.comments %}
+                                  <div class="count media-right">
+                                      <a class="state-false" href="{% url 'community' questions.id %}">{{ questions.comments|length }}</a>
+                                  </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                      </div>
+                {% endblock %}
+                <div class="panel-footer clearfix">
+                  <ul class="pagination">
+                    {% if curr_page != 1 %}
+                        <li><a rel="next" href="/node/{{ Nid }}?page=1">首页</a></li>
+                        <li><a rel="next" href="/node/{{ Nid }}?page={{ up_page }}">上一页</a></li>
+                    {% endif %}
+                    {% for page in page_list %}
+                        <li {% if curr_page == page %}class="active"{% endif %}><a rel="next" href="/node/{{ Nid }}?page={{ page }}">{{ page }}</a></li>
+                    {% endfor %}
+                    {% if total_page != curr_page %}
+                        <li><a rel="next" href="/node/{{ Nid }}?page={{ next_page }}">下一页</a></li>
+                        <li><a rel="next" href="/node/{{ Nid }}?page={{ total_page }}">末页</a></li>
+                    {% endif %}
+                  </ul>
+                </div>
+                </div>
+                <div class="index-sections panel panel-default">
+              <div class="panel-heading">讨论节点分类导航</div>
+              <div class="panel-body">
+                <div class="row node-list">
+                    {% for node in nodechilds %}
+                      <div class="node media">
+                        <label class="media-left">{{ node.title }}</label>
+                        <span class="nodes media-body">
+                        {% for childnode in node.nodechild %}
+                            <span class="name"><a title="{{ childnode.title }}" data-id="{{ childnode.id }}" href="{% url 'get_node' childnode.id %}">{{ childnode.title }}</a></span>
+                        {% endfor %}
+                        </span>
+                      </div>
+                    {% endfor %}
+                </div>
+              </div>
+            </div>
+            </div>
+            {% block rigth_block %}
+                <div class="index-locations panel panel-default" style="float: right;width: 300px">
+                  <div class="panel-heading">热门节点 <i class="iconfont icon-jiedian" aria-hidden="true"></i></div>
+                  <div class="panel-body location-list" style="text-align:center;">
+                        <span class="name"><a title="Appium" data-id="23" href="https://testerhome.com/topics/node23">Appium</a></span>
+                        <span class="name"><a title="招聘" data-id="19" href="https://testerhome.com/topics/node19">招聘</a></span>
+                        <span class="name"><a title="接口测试" data-id="62" href="https://testerhome.com/topics/node62">接口测试</a></span>
+                        <span class="name"><a title="新手区" data-id="36" href="https://testerhome.com/topics/node36">新手区</a></span>
+                        <span class="name"><a title="Bug 曝光台" data-id="47" href="https://testerhome.com/topics/node47">Bug 曝光台</a></span>
+                        <span class="name"><a title="违规处理区" data-id="55" href="https://testerhome.com/topics/node55">违规处理区</a></span>
+                        <span class="name"><a title="问答" data-id="20" href="https://testerhome.com/topics/node20">问答</a></span>
+                        <span class="name"><a title="自动化工具" data-id="2" href="https://testerhome.com/topics/node2">自动化工具</a></span>
+                        <span class="name"><a title="通用技术" data-id="25" href="https://testerhome.com/topics/node25">通用技术</a></span>
+                        <span class="name"><a title="测试基础" data-id="33" href="https://testerhome.com/topics/node33">测试基础</a></span>
+                  </div>
+                </div>
+            {% endblock %}
+        </div>
+    </div>
+{% endblock %}

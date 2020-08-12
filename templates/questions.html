@@ -1,0 +1,59 @@
+{% extends 'nodebase.html' %}
+{% block nav_block %}
+<ul class="nav navbar-nav">
+    <li class=""><a href="{% url 'get_node' 'topics' %}">社区</a></li><li class=""><a href="{% url 'get_node' 'bugs' %}">Bug 曝光台</a></li><li class="active"><a href="{% url 'get_node' 'questions' %}">问答</a></li><li class=""><a href="{% url 'get_college' %}">社团</a></li><li class=""><a href="{% url 'get_node' 'applications' %}">招聘</a></li><li class="">
+  </ul>
+{% endblock %}
+
+{% block title_block %}
+  <div class="sub-navbar node-header hide-ios">
+    <div class="container">
+        <div class="title">
+          问答
+          <span class="total">共有 {{ total }} 个讨论主题</span>
+        </div>
+        <div class="summary" id="node-summary">
+          <p>在 T社，我们不提倡 <a href="https://testerhome.com/topics/2157" target="_blank">新手提问</a> ，如果你遇到难题，请先 <a href="https://testerhome.com/search?q=%E5%85%B3%E9%94%AE%E5%AD%97" target="_blank">搜索</a> 再提问</p>
+        </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block list_block %}
+      <div class="panel-body item-list">
+        {% for questions in questionss %}
+            <div class="topic media topic-24751">
+              <div class="avatar media-left">
+                <a title="{{ questions.uid }} ({{ questions.uname }})" href="{% url 'userinfo' questions.uid %}"><img class="media-object avatar-48" src="{{ MEDIA_URL }}{{ questions.portrait }}"></a>
+              </div>
+              <div class="infos media-body">
+                <div class="title media-heading">
+                  <a title="{{ questions.title }}" href="{% url 'community' questions.id %}">
+                    <span class="node">{{ questions.flag }}</span>
+                    {{ questions.title }}
+            </a>
+                </div>
+                <div class="info">
+                    <a class="user-name" data-name="{{ questions.uname }}" title="{{ questions.uname }}({{ questions.uid }})" href="{% url 'userinfo' questions.uid %}">{{ questions.uname }}</a>
+                    {% if questions.recovery_username %}
+                      <span class="hidden-mobile">
+                      •
+                        最后由 <a class="user-name" data-name="{{ questions.recovery_username }}" title="{{ questions.recovery_username }}({{ questions.recovery_uid }})" href="{% url 'userinfo' questions.recovery_uid %}">{{ questions.recovery_username }}</a> 回复于 <abbr class="timeago"  rel="twipsy">{{ questions.recovery_time }}</abbr>
+                      </span>
+                    {% else %}
+                      <span class="hidden-mobile">
+                      •
+                        发布于 <abbr class="timeago"  rel="twipsy">{{ questions.release_time }}</abbr>
+                      </span>
+                    {% endif %}
+                </div>
+              </div>
+                {% if questions.comments %}
+                  <div class="count media-right">
+                      <a class="state-false" href="{% url 'community' questions.id %}">{{ questions.comments|length }}</a>
+                  </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+      </div>
+{% endblock %}

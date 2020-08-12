@@ -1,0 +1,266 @@
+{% extends 'index.html' %}
+
+{% block main %}
+<div id="main" class="main-container container">
+<div class="row">
+  <div class="col-md-9">
+    <div class="topic-detail panel panel-default">
+      <div class="panel-heading media clearfix">
+  <div class="media-body">
+    <h1 class="media-heading">
+      <a class="node" href="https://testerhome.com/topics/node130">{{ community.flag }}</a>
+      <span class="title">
+        {{ community.title }}
+      </span>
+      
+    </h1>
+    <div class="info">
+      <a data-author="true" class="user-name" data-name="{{ community.username }}" title="{{ community.username }}({{ community.uid }})" href="https://testerhome.com/{{ community.uid }}">{{ community.username }}</a>
+      <span class="hidden-mobile">
+      </span>
+       ·
+      <abbr class="timeago" title="" rel="twipsy" >{{ community.release_time }}</abbr>
+      <span class="hidden-mobile">
+      {% if  community.recovery_username %}
+          ·
+        最后由 {{ community.recovery_username }} 回复于 <abbr class="timeago" title="" rel="twipsy" >{{ community.recovery_time }}</abbr>
+      {% endif %}
+        {% if community.admin_username %}
+                     ·
+        最后更新自管理员 <a class="user-name" data-name="{{ community.admin_username }}" title="{{ community.admin_username }}({{ community.admin_uid }})" href="https://testerhome.com/Lihuazhang">{{ community.admin_username }}</a>
+        {% endif %}
+               ·
+      {{ community.hit }} 次阅读
+    </span></div>
+  </div>
+
+</div>
+    {% if community.awesome %}
+        <div class="label-awesome">
+          <i class="iconfont icon-zuanshi"></i> 本帖已被设为精华帖！
+        </div>
+    {% endif %}
+{{ community.content|safe }}
+
+
+<div class="panel-footer clearfix">
+        <div class="opts">
+    <a data-count="2" data-state="deactive" data-type="Topic" data-id="23456" class="likeable deactive tooltipstered" href="#"><i class="iconfont icon-zan"></i> <span>{{ community.zan }} 个赞</span></a>
+    
+    
+
+  <a title="举报" data-remote="true" href="#"><i class="fa fa-flag"></i> 举报</a>
+  <span class="pull-right opts">
+    <a target="_blank" title="微信排版" href="#"><i class="iconfont icon-weixin"></i></a>
+  </span>
+</div>
+
+      </div>
+    </div>
+
+    
+    <div class="alert alert-block topic-copyright">
+  <div class="markdown">
+   转载文章时务必注明原作者及原始链接，并注明「发表于 TesterHome 」，并不得对作品进行修改。
+  </div>
+</div>
+
+        <div class="topic-reward">
+  <div class="media-body">
+    <strong>如果觉得我的文章对您有用，请随意打赏。您的支持将鼓励我继续创作！</strong>
+  </div>
+  <div class="media-right">
+    <a class="btn btn-success" data-remote="true" href="#"><i class="iconfont icon-erweima"></i> <span>打赏支持</span></a>
+  </div>
+</div>
+
+
+    <!--先显示最佳回复-->
+    {% if community.comments|length %}
+        <div id="replies" class="panel panel-default" data-last-floor="9">
+          <div class="total panel-heading hide-ios">
+            <span class="total-info">
+            共收到 <b>{{ community.comments|length }}</b> 条回复
+            </span>
+            <span class="pull-right">
+              <a data-toggle="tooltip" data-original-title="按创建时间排序" class="btn btn-default btn-sm " href="https://testerhome.com/topics/23456?order_by=created_at&amp;#replies">时间</a>
+              <a data-toggle="tooltip" data-original-title="按回复点赞数量排序" class="btn btn-default btn-sm " href="https://testerhome.com/topics/23456?order_by=like&amp;#replies">点赞</a>
+            </span>
+
+          </div>
+          <div class="items panel-body">
+              {% for comment in community.comments %}
+                  {% if comment.quote_user_name %}
+                      {% if comment.quote_title  %}
+                            <div class="reply reply-system" data-id="154672" id="reply1">
+                              <div id="reply-154672" data-floor="1">
+                                  <a title="{{ comment.quote_uname }} ({{ comment.quote_uid }} )" href="{% url 'userinfo' comment.quote_uid %}"><img class="media-object avatar-16" src="{{ MEDIA_URL }}{{ comment.quote_user_portrait }}"></a> <a class="user-name" data-name="{{comment.quote_user_name}}" title="{{ comment.quote_user_name }}" href="{% url 'userinfo' comment.quote_uid %}">{{ comment.quote_uname }}</a>
+                                在
+                                  {% if comment.quote_id %}
+                                      <span class="topic">
+                                          <a title="{{ comment.quote_title }}" href="{% url 'community' comment.quote_id %}">{{ comment.quote_title }}</a>
+                                        </span>
+                                  {% else %}
+                                      <span class="topic">
+                                          [该话题已被删除]
+                                        </span>
+                                  {% endif %}
+                                  中提及了此贴
+                            <span class="time">10月16日 17:34</span>
+                            </div>
+                        </div>
+                      {% else %}
+                          <div class="reply reply-system" data-id="154672" id="reply1">
+                          <div id="reply-154672" data-floor="1">
+                              <a title="{{ comment.quote_uname}} ({{ comment.quote_uid }} }})" href="{% url 'userinfo' comment.quote_uid %}"><img class="media-object avatar-16" src="{{ MEDIA_URL }}{{ comment.quote_user_portrait }}"></a> <a class="user-name" data-name="{{comment.quote_uname}}" title="{{ comment.quote_uname }}" href="{% url 'userinfo' comment.quote_uid %}">{{ comment.quote_uname }}</a>
+                                将本帖设为了精华贴
+                                <span class="time">10月17日 11:26</span></div>
+                                </div>
+                      {% endif %}
+                  {% endif %}
+                  {% if comment.content %}
+                      <div class="reply" data-id="165798" id="reply11">
+                      <div id="reply-165798" data-floor="11">
+                          <div class="avatar"><a title="{{ comment.user }}" href="{% url 'userinfo' comment.uid %}"><img class="media-object avatar-48" src="{{ MEDIA_URL }}{{ comment.user_portrait }}"></a></div>
+                          <div class="infos">
+                            <div class="info">
+                              <span class="name">
+                                <a class="user-name" data-name="{{ comment.username }}" title="{{ comment.user }}" href="{% url 'userinfo' comment.uid %}">{{ comment.username }}</a>
+                              </span>
+                              <span class="sub-info">
+                                <span class="floor"># {{ forloop.counter }}</span> ·
+                                <a class="time" href="#reply-165798"><abbr class="timeago" title="" rel="twipsy" data-original-title="{{ comment.release_time }}">{{ comment.date }}</abbr></a>
+                              </span>
+                            </div>
+                          {{ comment.content|safe }}
+                      </div>
+                  </div>
+                </div>
+                  {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+  {% else %}
+        <div class="no-result">暂无回复。</div>
+  {% endif %}
+</div>
+  <div class="sidebar hidden-mobile col-md-3">
+    <div id="topic-author-info" class="panel profile panel-default">
+  <div class="panel-heading">作者</div>
+  <div class="panel-body">
+    <div class="media">
+      <div class="avatar media-left">
+        <div class="image"><a title="{{ user.uid }} ({{ user.uname }})" href="{% url 'userinfo' user.uid %}"><img class="media-object avatar-48" src="{{ MEDIA_URL }}{{ user.img }}"></a></div>
+      </div>
+      <div class="media-body">
+        <div class="item">
+          {{ user.uid }} ({{ user.uname }})
+        </div>
+        <div class="item number">
+          第 {{ user.number }} 位会员 / <span title="注册日期">{{ user.date }}</span>
+        </div>
+          {% if user.company %}
+            <div class="item company">
+              {{ user.company }}
+               @ <span title="所在地"><a href="https://testerhome.com/users/city/%E4%B8%8A%E6%B5%B7">{{ user.addr }}</a></span>
+            </div>
+          {% endif %}
+      </div>
+        <div class="user-teams">
+                <div>
+                    {% for college in college_items %}
+                      <a title="{{ college.id }} ({{ college.title}})" style="text-decoration: none" href="{% url 'get_college_detail' college.id %}"><div class="user-team-name"> <img class="media-object avatar-32" src="{{ MEDIA_URL }}{{ college.img }}">{{ college.title }}</div></a>
+                    {% endfor %}
+                </div>
+          </div>
+    </div>
+    {% if user.tagline %}
+        <div class="tagline row">
+          {{  user.tagline }}
+        </div>
+    {% endif %}
+  </div></div>
+  <div id="topic-sidebar" class="affix-top">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <a class="btn btn-block btn-sm btn-move-page btm-top-move" data-type="top"><i class="iconfont icon-xiangshang"></i></a>
+      <div class="buttons">
+        <div class="group likes opts">
+          <a data-count="148" data-state="deactive" data-type="Topic" data-id="982" class="likeable deactive tooltipstered" href="#"><i class="iconfont icon-zan" style="font-size: 30px;color: red "></i> <span>{{ community.zan }} 个赞</span></a>
+        </div>
+      </div>
+      <hr>
+      <div class="reply-buttons">
+        <div class="total">
+          共收到 <b>{{ community.comments|length }}</b> 条回复
+        </div>
+      </div>
+      <hr>
+      <div class="group opts">
+
+      </div>
+      <a  class="btn btn-block btn-move-page btm-bottom-move" data-type="bottom"><i class="iconfont icon-xiangxia"></i></a>
+    </div>
+  </div>
+
+  <div class="notify-updated">
+    <a class="update" href="#"><i class="fa fa-bell-o"></i> <b>有新回复！</b>点击这里立即载入</a>
+  </div>
+</div>
+  </div>
+</div>
+</div>
+    <script type="text/javascript">
+    var $topicsidebar = $('#topic-sidebar')
+    $(document).scroll(function () {
+        var scrollTop = $(document).scrollTop()
+        if(scrollTop > 600){
+            $topicsidebar.addClass('affix')
+            $topicsidebar.removeClass('affix-top')
+        }else{
+            $topicsidebar.addClass('affix-top')
+            $topicsidebar.removeClass('affix')
+        }
+    })
+    var $topmove = $('.btm-top-move')
+    var $bottommove = $('.btm-bottom-move')
+    downIntTime = upIntTime = ''
+    $topmove.click(function () {
+        var upIntTime = setInterval(function(){
+            if (downIntTime) {
+                clearInterval(downIntTime)
+            }
+            var scrollTop = $(document).scrollTop()
+            if (scrollTop === 0) {
+                clearInterval(upIntTime)
+            }
+            $(document).scrollTop(scrollTop-30)
+        }, 5);
+    })
+    $bottommove.click(function () {
+        var downIntTime = setInterval(function(){
+            if (upIntTime) {
+                clearInterval(upIntTime)
+            }
+            var scrollTop = $(document).scrollTop()
+            var windowHeight = $(document).height()
+            if ($(document).scrollTop() >= $(document).height() - $(window).height()) {
+                clearInterval(downIntTime)
+            }
+            $(document).scrollTop(scrollTop+30)
+        }, 5);
+    })
+    $zan = $('.icon-zan')
+    $zan.click(function () {
+        var color = $zan.css('color')
+        if (color === 'rgb(102, 102, 102)' || color === 'rgb(255, 0, 0)') {
+            $zan.css('color', '#000')
+        }else{
+            $zan.css('color', 'red')
+        }
+
+    })
+    
+</script>
+
+{% endblock %}

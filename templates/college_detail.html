@@ -1,0 +1,78 @@
+{% extends 'index.html' %}
+
+{% block main %}
+<div id="main" class="main-container container">
+
+
+
+<ul class="nav nav-tabs team-menu"><li class="active"><a href="{% url 'get_college_detail' college.id %}">成员的话题列表</a></li><li class=""><a href="{% url 'get_college_user' college.id %}">成员列表</a></li></ul>
+
+
+<div class="row">
+  <div class="col-md-8">
+    <div class="panel topics">
+      <div class="panel-body">
+          {% for community in communitys %}
+            <div class="topic media topic-{{ community.id }}">
+              <div class="avatar media-left">
+                <a title="{{ college.id }} ({{ college.title }})" href="{% url 'get_college_detail' college.id %}"><img class="media-object avatar-48" src="{{ MEDIA_URL }}{{ community.portrait }}"></a>
+              </div>
+              <div class="infos media-body">
+                <div class="title media-heading">
+                  <a title="{{ community.title }}" href="{% url 'community' community.id %}">
+                    <span class="node">{{ community.falg }}</span>
+                    {{ community.title }}
+            </a>
+
+                </div>
+                <div class="info">
+                    <a class="user-name" data-name="{{ community.username }}" title="{{ community.username }}({{ community.uid }})" href="{% url 'userinfo' community.uid %}">{{ community.username }}</a>
+                      for <a class="team-name" data-name="{{ college.title }}" title="{{ college.title }}({{ college.id }})" href="{% url 'get_college_detail' college.id %}">{{ college.title }}</a>
+                    {% if community.recovery_uid %}
+                      <span class="hidden-mobile">
+                      •
+                        最后由 <a class="user-name" data-name="{{ community.recovery_uname }}" title="{{ community.recovery_uname }}({{ community.recovery_uid }})" href="{% url 'userinfo' community.recovery_uid %}u">win</a> 回复于 <abbr class="timeago"  rel="twipsy">{{ community.recovery_time }}</abbr>
+                      </span>
+
+                    {% else %}
+                        <span class="hidden-mobile">
+                            •
+                            发布于 <abbr class="timeago" rel="twipsy">{{ community.release_time }}</abbr>
+                        </span>
+                    {% endif %}
+                </div>
+              </div>
+              {% if community.comments %}
+                  <div class="count media-right">
+                      <a class="state-false" href="{% url 'community' community.id %}">{{ community.comments | length }}</a>
+                  </div>
+              {% endif %}
+            </div>
+          {% endfor %}
+      </div>
+      <div class="panel-footer">
+
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar team-sidebar col-sm-4">
+  <div class="members panel">
+    <div class="panel-heading">成员列表</div>
+    <div class="panel-body">
+        {% for user in college.users %}
+            <a title="{{ user.uid }} ({{ user.uid }})" href="{% url 'userinfo' user.uid %}"><img class="media-object avatar-32" src="{{ MEDIA_URL }}{{ user.img }}"></a>
+        {% endfor %}
+    </div>
+    <div class="panel-footer">
+      <a href="https://testerhome.com/kujiale/people">所有成员...</a>
+    </div>
+  </div>
+
+
+</div>
+
+</div>
+
+</div>
+{% endblock %}

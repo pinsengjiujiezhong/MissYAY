@@ -1,0 +1,41 @@
+{% extends 'userbase.html' %}
+{% block right_block %}
+
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="row">
+        {% for follow in follows %}
+              <div class="col-xs-12 col-sm-6 col-md-4">
+                <div class="media user-card">
+                  <div class="media-left"><a title="{{ follow.uid }} ({{ follow.uname }})" href="{% url 'userinfo' follow.uid %}"><img class="media-object avatar-48" src="{{ MEDIA_URL }}{{ follow.img }}"></a></div>
+                  <div class="media-body">
+                    <div class="media-heading"><a class="user-name" data-name="{{ follow.uname }}" title="{{ follow.uname }}({{ follow.uid }})" href="{% url 'userinfo' follow.uid %}">{{ follow.uname }}</a></div>
+                    <div class="infos">
+                      <div class="item opts"><a title="" data-id="{{ follow.uid }}" class="button-follow-user " href="https://testerhome.com/Lihuazhang/followers#"><i class="iconfont icon-yonghu"></i> <span>关注</span></a></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        {% endfor %}
+        </div>
+      </div>
+        {% if page_num > 2 %}
+            <div class="panel-footer clearfix">
+              <ul class="pagination">
+                {% if curr_page != 1 %}
+                    <li><a rel="next" href="{% url 'get_follow' uid %}?page=1&type={{ type }}">首页</a></li>
+                    <li><a rel="next" href="{% url 'get_follow' uid %}?page={{ up_page }}&type={{ type }}">上一页</a></li>
+                {% endif %}
+                {% for page in pageList %}
+                    <li {% if curr_page == page %}class="active"{% endif %}><a rel="next" href="{% url 'get_follow' uid %}?page={{ page }}&type={{ type }}">{{ page }}</a></li>
+                {% endfor %}
+                {% if total_page != curr_page %}
+                    <li><a rel="next" href="{% url 'get_follow' uid %}?page={{ next_page }}&type={{ type }}">下一页</a></li>
+                    <li><a rel="next" href="{% url 'get_follow' uid %}?page={{ total_page }}&type={{ type }}">末页</a></li>
+                {% endif %}
+
+              </ul>
+            </div>
+        {% endif %}
+  </div>
+{% endblock %}

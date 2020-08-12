@@ -1,0 +1,42 @@
+{% extends 'nodebase.html' %}
+
+{% block nav_block %}
+<ul class="nav navbar-nav">
+    <li class="active"><a href="{% url 'get_node' 'topics' %}">社区</a></li><li class=""><a href="{% url 'get_node' 'bugs' %}">Bug 曝光台</a></li><li class=""><a href="{% url 'get_node' 'questions' %}">问答</a></li><li class=""><a href="{% url 'get_college' %}">社团</a></li><li class=""><a href="{% url 'get_node' 'applications' %}">招聘</a></li><li class="">
+  </ul>
+{% endblock %}
+
+{% block list_block %}
+    {% for topics in topicss %}
+      <div class="topic media topic-24221">
+          <div class="avatar media-left">
+            <a title="simple" href="{% url 'community' topics.id %}"><img class="media-object avatar-48" src="{{ MEDIA_URL }}{{ topics.portrait }}"></a>
+          </div>
+          <div class="infos media-body">
+            <div class="title media-heading">
+              <a title="{{ topics.title }}" href="{% url 'community' topics.id %}">
+                <span class="node">{{ topics.flag }}</span>
+                {{ topics.title }}</a>{% if topics.awesome %}<i class="iconfont icon-zuanshi" title="精华帖"></i>{% endif %}
+            </div>
+
+             <div class="info">
+                <a class="user-name" data-name="simple" title="{{ topics.uid }}({{ topics.uname }})" href="{% url 'userinfo' topics.uid %}">{{ topics.uname }}</a>
+              <span class="hidden-mobile">
+              {% if topics.recovery_time %}
+                •最后由 <a class="user-name" data-name="{{ topics.recovery_username }}" title="{{ topics.recovery_uid }}({{ topics.recovery_username }})" href="{% url 'userinfo' topics.recovery_uid %}">{{ topics.recovery_username }}</a> 回复于 <abbr class="timeago" title="" rel="twipsy" >{{ topics.recovery_time }}</abbr>
+              {% else %}
+                  • 发布于 <abbr class="timeago" title="" rel="twipsy" >{{ topics.release_time }} </abbr>
+              {% endif %}
+              </span>
+            </div>
+
+          </div>
+          <div class="count media-right">
+              {% if topics.comments %}
+                  <a class="state-false" href="{% url 'community' topics.id %}">{{ topics.comments|length }}</a>
+              {% endif %}
+          </div>
+        </div>
+    {% endfor %}
+{% endblock %}
+

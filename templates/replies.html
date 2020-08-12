@@ -1,0 +1,54 @@
+{% extends 'userbase.html' %}
+
+{% block right_block %}
+    <div class="panel panel-default">
+  <ul class="list-group recent-replies">
+      {% for replies in repliess %}
+          <li class="list-group-item">
+            <div class="title">
+              <a href="{% url 'community' replies.id %}">{{ replies.title }}</a>
+              <span class="info">at <abbr class="timeago" rel="twipsy">{{ replies.comments.date }}</abbr></span>
+            </div>
+            {{ replies.comments.content|safe }}
+          </li>
+      {% endfor %}
+</ul>
+
+  {% if page_num > 2 %}
+        <div class="panel-footer clearfix">
+          <ul class="pagination">
+            {% if curr_page != 1 %}
+                <li><a rel="next" href="{% url 'get_replies' uid %}?page=1&type={{ type }}">首页</a></li>
+                <li><a rel="next" href="{% url 'get_replies' uid %}?page={{ up_page }}">上一页</a></li>
+            {% endif %}
+            {% for page in pageList %}
+                <li {% if curr_page == page %}class="active"{% endif %}><a rel="next" href="{% url 'get_replies' uid %}?page={{ page }}">{{ page }}</a></li>
+            {% endfor %}
+            {% if total_page != curr_page %}
+                <li><a rel="next" href="{% url 'get_replies' uid %}?page={{ next_page }}">下一页</a></li>
+                <li><a rel="next" href="{% url 'get_replies' uid %}?page={{ total_page }}">末页</a></li>
+            {% endif %}
+
+          </ul>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block custom_js %}
+<script type="text/javascript" data-turbolinks-eval="false">
+    $markdown = $('div.markdown')
+    $.each($markdown, (index, markdown) => {
+        $(markdown).addClass('body')
+    })
+    $twemoji = $('img.twemoji')
+    $.each($twemoji, (index, twemoji) => {
+        var emoji = $(twemoji).attr('alt')
+        var node = $(twemoji).parent().text()
+        node += emoji
+        $p = $(twemoji).parent()
+        $p.empty()
+        $p.append(node)
+    })
+</script>
+{% endblock %}
