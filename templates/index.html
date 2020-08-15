@@ -2,6 +2,7 @@
 {% load static %}
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet"  href="{% static 'css/front.css' %}">
+    <link rel="stylesheet"  href="{% static 'css/github.css' %}">
     <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/iconfont.css' %}">
     <script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
@@ -41,12 +42,14 @@
                       </div>
                      <div id="main-nav-menu">
                         <ul class="nav navbar-nav">
-                    <li class="{% if Nid == 'topics' %}active{% endif %}"><a href="{% url 'get_node' 'topics' %}">社区</a>
-                    </li><li class="{% if Nid == 'bugs' %}active{% endif %}"><a href="{% url 'get_node' 'bugs' %}">Bug 曝光台</a></li>
-                    <li class="{% if Nid == 'questions' %}active{% endif %}"><a href="{% url 'get_node' 'questions' %}">问答</a></li>
-                    <li class="{% if colleges %}active{% endif %}"><a href="{% url 'get_college' %}">社团</a></li>
-                    <li class="{% if Nid == 'applications' %}active{% endif %}"><a href="{% url 'get_node' 'applications' %}">招聘</a></li><li class="">
-                    </ul>
+                            <li class="{% if Nid == 'topics' %}active{% endif %}"><a href="{% url 'get_node' 'topics' %}">社区</a>
+                            </li><li class="{% if Nid == 'bugs' %}active{% endif %}"><a href="{% url 'get_node' 'bugs' %}">Bug 曝光台</a></li>
+                            <li class="{% if Nid == 'questions' %}active{% endif %}"><a href="{% url 'get_node' 'questions' %}">问答</a></li>
+                            <li class="{% if colleges %}active{% endif %}"><a href="{% url 'get_college' %}">社团</a></li>
+                            <li class="{% if Nid == 'applications' %}active{% endif %}"><a href="{% url 'get_node' 'applications' %}">招聘</a></li>
+                            <li class="{% if type == 'sites' %}active{% endif %}"><a href="{% url 'get_sites' %}">酷站</a></li>
+                            <li class="{% if type == 'ttf' %}active{% endif %}"><a href="{% url 'get_ttf' %}">TTF榜单</a></li>
+                        </ul>
                     </div>
                     </div>
                     <ul class="nav navbar-nav user-bar navbar-right" style="margin-left: 50px">
@@ -382,6 +385,14 @@
                         var href = '/searcharticle?keyword=' +  keyword
                         $(window).attr('location', href);
                     }
+                })
+                $twemoji = $('.twemoji')
+                $.each($twemoji, (index, emoji) => {
+                    var emojiValue = $(emoji).attr('alt')
+                    console.log(emojiValue)
+                    spanNode = '<span>' +  emojiValue + '</span>'
+                    $(emoji).before(spanNode)
+                    $(emoji).remove()
                 })
             </script>
             {% block custom_js %}
