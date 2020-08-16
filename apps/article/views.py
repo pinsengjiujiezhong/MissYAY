@@ -8,6 +8,7 @@ from elasticsearch import Elasticsearch
 from django.shortcuts import render, HttpResponse
 import pymongo
 es = Elasticsearch([{'host': '140.143.15.155', 'port': 9200}])
+# es = Elasticsearch([{'host': '127.0.0.1', 'port': 9200}])
 client = pymongo.MongoClient('127.0.0.1')
 mydb = client.testerhomes
 sites = mydb.sites
@@ -595,6 +596,9 @@ class GetNode(View):
             return render(request, 'applications.html', result)
         elif Nid == 'topics':
             result['topicss'] = node_items
+            for item in node_items:
+                print(item['id'])
+                print(item['uid'], '----', item['recovery_time'], '-----', item['recovery_uid'])
             return render(request, 'topics.html', result)
         else:
             result['nodes'] = node_items
@@ -755,15 +759,15 @@ class GetReplies(View):
 
 class GetSites(View):
     def get(self, request):
-        # sites_items = es.search(index='testerhome_sites', doc_type='sites', body={"query": {"match_all": {}}})
-        # sites = sites_items['hits']['hits'][0]['_source']['sites']
-        sites_items = sites.find_one({})['sites']
-        return render(request, 'sites.html', {'sites': sites_items, 'type': 'sites'})
+        sites_items = es.search(index='testerhome_sites', doc_type='sites', body={"query": {"match_all": {}}})
+        sites = sites_items['hits']['hits'][0]['_source']['sites']
+        # sites_items = sites.find_one({})['sites']
+        return render(request, 'sites.html', {'sites': sites, 'type': 'sites'})
 
 
 class GetTTF(View):
     def get(self, request):
-        # ttf_items = es.search(index='testerhome_sites', doc_type='sites', body={"query": {"match_all": {}}})
-        # ttf = ttf_items['hits']['hits'][0]['_source']['ttf']
-        ttf = sites.find_one({})['ttf']
+        ttf_items = es.search(index='testerhome_sites', doc_type='sites', body={"query": {"match_all": {}}})
+        ttf = ttf_items['hits']['hits'][0]['_source']['ttf']
+        # ttf = sites.find_one({})['ttf']
         return render(request, 'sites.html', {'ttf': ttf, 'type': 'ttf'})
