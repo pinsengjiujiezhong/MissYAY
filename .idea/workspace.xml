@@ -3,10 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="0a64f705-d14d-44d8-bd9e-26007caeb4e3" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/article/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/article/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/userbase.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/userbase.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/userinfo.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/userinfo.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/testhome/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/testhome/settings.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -32,7 +28,7 @@
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../MissYAY-Crawler" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -176,7 +172,7 @@
       <workItem from="1597508503935" duration="3361000" />
       <workItem from="1597552278432" duration="1932000" />
       <workItem from="1597555915237" duration="948000" />
-      <workItem from="1597584394134" duration="3960000" />
+      <workItem from="1597584394134" duration="4648000" />
     </task>
     <servers />
   </component>

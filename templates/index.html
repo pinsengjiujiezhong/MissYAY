@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/iconfont.css' %}">
     <script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
-    <title>MissYAY</title>
+    <title>{%if community.title %}community.title{% else %}MissYAY{% endif %}</title>
     <style type="text/css">
         .header.form-search{
             margin-top: 3px;
