@@ -44,17 +44,16 @@
 
 
 <div class="panel-footer clearfix">
-        <div class="opts">
-    <a data-count="2" data-state="deactive" data-type="Topic" data-id="23456" class="likeable deactive tooltipstered" href="#"><i class="iconfont icon-zan"></i> <span>{{ community.zan }} 个赞</span></a>
-    
-    
+    <div class="opts">
+        <a data-count="{{ community.zan }} " data-state="deactive" data-type="Topic" data-id="{{ community.id }}" class="likeable deactive tooltipstered" href="#"><i class="iconfont icon-zan"></i> <span>{{ community.zan }} 个赞</span></a>
+        <a data-id="{{ community.id }}" class="follow" href="#"><i class="iconfont icon-guanzhu"></i> 关注</a>
+        <a title="收藏" class="bookmark " data-id="{{ community.id }}" href="#"><i class="iconfont icon-collection-b"></i> 收藏</a>
 
-  <a title="举报" data-remote="true" href="#"><i class="fa fa-flag"></i> 举报</a>
-  <span class="pull-right opts">
-    <a target="_blank" title="微信排版" href="#"><i class="iconfont icon-weixin"></i></a>
-  </span>
-</div>
-
+      <a title="举报" data-remote="true"><i class="iconfont icon-jubao"></i> 举报</a>
+      <span class="pull-right opts">
+        <a target="_blank" title="微信排版" href="#"><i class="iconfont icon-weixin"></i></a>
+      </span>
+    </div>
       </div>
     </div>
 
