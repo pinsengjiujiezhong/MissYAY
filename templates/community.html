@@ -91,7 +91,7 @@
               {% for comment in community.comments %}
                   {% if comment.quote_user_name %}
                       {% if comment.quote_title  %}
-                            <div class="reply reply-system" data-id="154672" id="reply1">
+                            <div class="reply reply-system" data-id="{{ comment.comment_id }}" id="reply{{ comment.comment_floor }}">
                               <div id="reply-154672" data-floor="1">
                                   <a title="{{ comment.quote_uname }} ({{ comment.quote_uid }} )" href="{% url 'userinfo' comment.quote_uid %}"><img class="media-object avatar-16" src="{{ MEDIA_URL }}{{ comment.quote_user_portrait }}"></a> <a class="user-name" data-name="{{comment.quote_user_name}}" title="{{ comment.quote_user_name }}" href="{% url 'userinfo' comment.quote_uid %}">{{ comment.quote_uname }}</a>
                                 在
@@ -109,17 +109,17 @@
                             </div>
                         </div>
                       {% else %}
-                          <div class="reply reply-system" data-id="154672" id="reply1">
-                          <div id="reply-154672" data-floor="1">
+                          <div class="reply reply-system" data-id="{{ comment.comment_id }}" id="reply{{ comment.comment_floor }}">
+                          <div id="reply-{{ comment.comment_id }}" data-floor="{{ comment.comment_floor }}">
                               <a title="{{ comment.quote_uname}} ({{ comment.quote_uid }} }})" href="{% url 'userinfo' comment.quote_uid %}"><img class="media-object avatar-16" src="{{ MEDIA_URL }}{{ comment.quote_user_portrait }}"></a> <a class="user-name" data-name="{{comment.quote_uname}}" title="{{ comment.quote_uname }}" href="{% url 'userinfo' comment.quote_uid %}">{{ comment.quote_uname }}</a>
-                                将本帖设为了精华贴
-                                <span class="time">10月17日 11:26</span></div>
+                                {{ comment.quote_content }}
+                                <span class="time">{{ comment.quote_date }}</span></div>
                                 </div>
                       {% endif %}
                   {% endif %}
                   {% if comment.content %}
-                      <div class="reply" data-id="165798" id="reply11">
-                      <div id="reply-165798" data-floor="11">
+                      <div class="reply" data-id="{{ comment.comment_id }}" id="reply{{ comment.comment_floor }}">
+                      <div id="reply-{{ comment.comment_id }}" data-floor="{{ comment.comment_floor }}">
                           <div class="avatar"><a title="{{ comment.user }}" href="{% url 'userinfo' comment.uid %}"><img class="media-object avatar-48" src="{{ MEDIA_URL }}{{ comment.user_portrait }}"></a></div>
                           <div class="infos">
                             <div class="info">
@@ -131,10 +131,28 @@
                                 <a class="time" href="#reply-165798"><abbr class="timeago" title="" rel="twipsy" data-original-title="{{ comment.release_time }}">{{ comment.date }}</abbr></a>
                               </span>
                             </div>
+                            {% if comment.reply_id %}
+                                <div class="reply-to-block" data-reply-to-id="{{ comment.reply_id }}">
+                                    <div class="info">
+                                      对
+                                        <a title="{{ comment.reply_comment.uid }} ({{ comment.reply_comment.username }})" href="{% url 'userinfo' comment.reply_comment.uid %}"><img class="media-object avatar-16" src="{{ MEDIA_URL }}{{ comment.reply_comment.user_portrait }}"></a><a class="user-name" data-name="{{ comment.reply_comment.username }}" title="{{comment.reply_comment.username}}({{ comment.reply_comment.uid }})" href="{% url 'userinfo' comment.reply_comment.uid %}">{{ comment.reply_comment.username }}</a>
+                                        <span class="reply-floor">#{{ comment.reply_comment.reply_floor }}</span>
+                                        回复
+                                    </div>
+                                        {{ comment.reply_comment.content|safe }}
+                                  </div>
+                            {% endif %}
                           {{ comment.content|safe }}
                       </div>
                   </div>
                 </div>
+                  {% endif %}
+                  {% if comment.delete %}
+                      <div class="reply reply-deleted" data-id="{{ comment.comment_id }}" id="reply{{ comment.comment_floor }}">
+                          <div id="reply-{{ comment.comment_id }}" data-floor="{{ comment.comment_floor }}">
+                              <div class="deleted text-center">{{ comment.delete }}</div>
+                          </div>
+                        </div>
                   {% endif %}
             {% endfor %}
           </div>

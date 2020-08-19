@@ -6,7 +6,12 @@ import json,re
 import time
 from elasticsearch import Elasticsearch
 from django.shortcuts import render, HttpResponse
+import pymongo
 es = Elasticsearch([{'host': '140.143.15.155', 'port': 9200}])
+# es = Elasticsearch([{'host': '127.0.0.1', 'port': 9200}])
+client = pymongo.MongoClient('127.0.0.1')
+mydb = client.testerhomes
+sites = mydb.sites
 
 # index页面
 class Index(View):
@@ -233,6 +238,10 @@ class GetCommunity(View):
         user_body = {"query": {"match": {"uid": uid}}}
         user_items = es.search(index='testerhome_user', doc_type='user', body=user_body)
         user_result = user_items['hits']['hits'][0]['_source']
+        print('community: ', community)
+        for comment in community['comments']:
+            if 'reply_id' in comment.keys():
+                print(comment['reply_id'])
         return render(request, 'community.html', {'community': community, 'college_items': college_result, 'user': user_result})
 
     def post(self, request):
@@ -587,6 +596,9 @@ class GetNode(View):
             return render(request, 'applications.html', result)
         elif Nid == 'topics':
             result['topicss'] = node_items
+            for item in node_items:
+                print(item['id'])
+                print(item['uid'], '----', item['recovery_time'], '-----', item['recovery_uid'])
             return render(request, 'topics.html', result)
         else:
             result['nodes'] = node_items
@@ -741,6 +753,21 @@ class GetReplies(View):
                 pageList = range(1, page_num)[curr_page - 5: curr_page + 5]
         return render(request, 'replies.html', {'type': 'replies', 'user': user_result, 'colleges': college_result, 'uid': Uid, 'repliess': repliess, 'total': total, 'pageList': pageList, 'curr_page': curr_page, 'page_num': page_num})
 
-
     def post(self, request, Uid):
         pass
+
+
+class GetSites(View):
+    def get(self, request):
+        sites_items = es.search(index='testerhome_sites', doc_type='sites', body={"query": {"match_all": {}}})
+        sites = sites_items['hits']['hits'][0]['_source']['sites']
+        # sites_items = sites.find_one({})['sites']
+        return render(request, 'sites.html', {'sites': sites, 'type': 'sites'})
+
+
+class GetTTF(View):
+    def get(self, request):
+        ttf_items = es.search(index='testerhome_sites', doc_type='sites', body={"query": {"match_all": {}}})
+        ttf = ttf_items['hits']['hits'][0]['_source']['ttf']
+        # ttf = sites.find_one({})['ttf']
+        return render(request, 'sites.html', {'ttf': ttf, 'type': 'ttf'})

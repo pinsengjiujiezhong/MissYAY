@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.conf.urls import url, include
 from article.views import GetArticle, Index, GetCommunity, Search, getUser, GetTopics, GetCollege, GetCollegeDetail, \
-    GetCollegeUser, GetQuestions, GetNode, GetFollow, GetFavs, GetReplies
+    GetCollegeUser, GetQuestions, GetNode, GetFollow, GetFavs, GetReplies, GetSites, GetTTF
 from django.views.static import serve
 from . import settings
 from django.conf.urls.static import static
@@ -37,5 +37,7 @@ urlpatterns = [
     url(r'^follow/(?P<Uid>.+)/$', GetFollow.as_view(), name='get_follow'),
     url(r'^favs/(?P<Uid>.+)/$', GetFavs.as_view(), name='get_favs'),
     url(r'^replies/(?P<Uid>.+)/$', GetReplies.as_view(), name='get_replies'),
+    url(r'^sites/$', GetSites.as_view(), name='get_sites'),
+    url(r'^ttf/$', GetTTF.as_view(), name='get_ttf'),
     # url(r'^media/(?P<path>.*)', serve, {"document_root": settings.MEDIA_ROOT}),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

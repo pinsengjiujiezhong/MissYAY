@@ -1,0 +1,12 @@
+{% extends 'index.html' %}
+{% block main %}
+    <div id="main" class="main-container container">
+        {% if type == 'sites' %}
+            {{ sites|safe }}
+        {% endif %}
+        {% if type == 'ttf' %}
+            {{ ttf|safe }}
+        {% endif %}
+    </div>
+{% endblock %}
+
